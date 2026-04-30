@@ -1,0 +1,16 @@
+name: Deploy CI
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Run Docker"
+      - run: docker build . -t muhammadmubeenmemon/next-js-app #it will refer the docker file in the root directory and build the image
+      - run: echo "${{secrets.DOCKERHUB_PASSWORD}}" | docker login -u ${{secrets.DOCKERHUB_USERNAME}} --password-stdin
+      - run: docker push muhammadmubeenmemon/next-js-app:latest #it will push the image to docker hub with the tag latest
